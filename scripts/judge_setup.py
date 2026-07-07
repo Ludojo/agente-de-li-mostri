@@ -5,8 +5,13 @@ Uso: python scripts/judge_setup.py
 """
 import os
 import re
+import sys
 import urllib.parse
 import urllib.request
+
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8")
 
 USER_AGENT = "AgenteDeLiMostri/1.0"
 RULES_PAGE = "https://magic.wizards.com/en/rules"

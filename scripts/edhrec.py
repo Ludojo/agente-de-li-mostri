@@ -11,6 +11,10 @@ import sys
 import unicodedata
 import urllib.request
 
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8")
+
 USER_AGENT = "AgenteDeLiMostri/1.0"
 
 

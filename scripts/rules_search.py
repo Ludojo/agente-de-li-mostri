@@ -10,6 +10,10 @@ import os
 import re
 import sys
 
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8")
+
 RULE_NUM_RE = re.compile(r"^\d{3}(\.\d+[a-z]?)?$")
 
 
