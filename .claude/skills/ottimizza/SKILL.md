@@ -39,6 +39,8 @@ Per ogni carta da comprare: `python scripts/ct_search.py "<nome>"` (legge le pre
 
 **Non scegliere automaticamente l'offerta piu' economica in assoluto.** A parita' di velocita' di consegna, se l'offerta piu' economica ha una condizione sensibilmente peggiore (es. Played/Poor) e quella con condizione migliore (es. Near Mint) non costa piu' del doppio, proponi quella di qualita' migliore. Il risparmio di pochi centesimi/euro non vale una carta rovinata se l'alternativa buona costa poco di piu'.
 
+**Limite noto sui tempi di consegna:** il sito CardTrader mostra a volte una stima tipo "+3 settimane" per certi venditori CT Zero, ma questa stima **non e' esposta dall'API** (verificato: il JSON del prodotto/venditore non contiene nessun campo con questo dato). L'unico segnale disponibile via API e' il tag "X-Day Ready" nel nome utente (auto-dichiarato dal venditore, quindi non affidabile al 100%, ma e' quello che c'e'). Per questo: **preferisci sempre venditori con tag "X-Day Ready"** quando la priorita' e' la velocita', e se un'offerta selezionata NON ha questo tag, avvisa esplicitamente l'utente che i tempi di consegna reali non sono verificabili da qui e potrebbero essere lunghi.
+
 ### 7. Carrello (solo dopo approvazione esplicita sulle offerte specifiche)
 `python scripts/ct_cart.py add <product_id>` per ognuna, poi `python scripts/ct_cart.py show` e ricorda all'utente di completare l'acquisto sul sito.
 
