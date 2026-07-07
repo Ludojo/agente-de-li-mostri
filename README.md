@@ -21,7 +21,7 @@ Assistente AI per Magic: The Gathering (formato Commander/EDH). Ottimizza i tuoi
 ## Installazione
 
 ```bash
-git clone https://github.com/<tuo-utente>/agente-de-li-mostri.git
+git clone https://github.com/Ludojo/agente-de-li-mostri.git
 cd agente-de-li-mostri
 ```
 
