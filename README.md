@@ -14,9 +14,23 @@ Assistente AI per Magic: The Gathering (formato Commander/EDH). Ottimizza i tuoi
 
 ## Requisiti
 
-- [Claude Code](https://claude.com/claude-code) **oppure** OpenAI Codex (o un altro agente AI che legge `AGENTS.md`)
-- Python 3.10+ (gli script usano solo la libreria standard, zero dipendenze)
-- Un account [CardTrader](https://www.cardtrader.com) con token API (gratuito, l'agente ti guida a crearlo)
+Prima di clonare il repo, assicurati di avere **uno** di questi strumenti AI da terminale già funzionante sul tuo computer. Senza uno di questi non puoi far girare l'agente.
+
+| Strumento | Cosa serve per usarlo | Costo |
+|---|---|---|
+| [Claude Code](https://claude.com/claude-code) (consigliato) | Account Anthropic con piano **Claude Pro o Max** | A pagamento (abbonamento mensile) |
+| [OpenAI Codex](https://openai.com/codex/) | Account OpenAI con **ChatGPT Plus o Pro** | A pagamento (abbonamento mensile) |
+| [Google Antigravity](https://antigravity.google/) | Account Google con piano **Gemini** a pagamento | A pagamento (abbonamento mensile) |
+
+**Non vuoi/puoi pagare un abbonamento?** Usa **[Gemini CLI](https://github.com/google-gemini/gemini-cli)** di Google: è gratuito e open source, con una fascia gratuita dell'API sufficiente per un uso non intensivo come questo.
+> ⚠️ Non ancora testato su questo repo in modo specifico — le istruzioni sono scritte in `AGENTS.md` (lo standard che Codex legge nativamente) e dovrebbero funzionare anche con Gemini CLI, ma se incontri problemi apri una issue.
+
+In alternativa, tutti e tre gli strumenti a pagamento offrono anche **crediti API a consumo** (paghi solo quello che usi, niente abbonamento fisso) — per un uso occasionale, tipo ottimizzare un mazzo ogni tanto, può costare pochi euro invece di un abbonamento pieno.
+
+Oltre allo strumento AI, ti serve:
+- **Python 3.10+** installato sul computer (gli script usano solo la libreria standard, zero dipendenze da installare — verifica con `python --version` o `python3 --version` nel terminale)
+- **Git** installato (per clonare il repo — verifica con `git --version`)
+- Un account [CardTrader](https://www.cardtrader.com) (gratuito, te lo fai al volo se non ce l'hai — il token API te lo fa creare l'agente stesso durante il setup)
 
 ## Installazione
 
@@ -25,9 +39,11 @@ git clone https://github.com/Ludojo/agente-de-li-mostri.git
 cd agente-de-li-mostri
 ```
 
-**Con Claude Code:** apri la cartella e scrivi `setup` (o semplicemente saluta: l'agente capisce che è il primo avvio e ti guida).
+Poi apri la cartella con lo strumento che hai scelto e digli semplicemente **"ciao"** — capisce da solo che è il primo avvio e ti guida lui passo passo nel setup. Non serve altro comando speciale, con nessuno dei quattro strumenti.
 
-**Con Codex:** apri la cartella; le istruzioni sono in `AGENTS.md`, chiedi di fare il setup.
+- **Claude Code**: `claude` nel terminale dentro la cartella del repo
+- **Codex**: apri la cartella, le istruzioni sono già in `AGENTS.md`
+- **Antigravity / Gemini CLI**: apri la cartella, stesso principio — legge `AGENTS.md`
 
 Il setup ti guida a:
 1. Creare il token API su CardTrader (Profilo → Impostazioni → App API) e salvarlo nel file `.env` locale
@@ -58,6 +74,14 @@ Il setup ti guida a:
 - [EDHPowerLevel](https://edhpowerlevel.com) — valutazione power level (manuale: l'agente ti prepara la lista da incollare)
 - [CardTrader API v2](https://www.cardtrader.com/docs/api/full/reference) — prezzi e acquisti
 - Comprehensive Rules, IPG, MTR ([Wizards](https://magic.wizards.com/en/rules), [Italian Magic Judges](https://italianmagicjudges.net/risorse))
+
+## Problemi comuni
+
+- **"python non è riconosciuto come comando"** → non hai Python installato, o non è nel PATH. Scaricalo da [python.org](https://python.org) (su Windows spunta "Add python.exe to PATH" durante l'installazione) e riapri il terminale.
+- **"git non è riconosciuto come comando"** → installa Git da [git-scm.com](https://git-scm.com) e riapri il terminale.
+- **Non ho nessuno dei quattro strumenti** → vedi la sezione [Requisiti](#requisiti): scegli Gemini CLI se non vuoi pagare, o valuta i crediti API a consumo prima di prendere un abbonamento pieno.
+- **L'agente dice che manca il token CardTrader** → normale al primo avvio, fatti guidare nel setup (basta scrivere "ciao" o "setup").
+- **Non so se ho già fatto il setup** → chiedi direttamente all'agente "ho già fatto il setup?", controlla da solo se esistono `.env` e `preferences.json`.
 
 ## Disclaimer
 
