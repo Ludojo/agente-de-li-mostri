@@ -1,0 +1,12 @@
+# Personali - MAI committare
+.env
+preferences.json
+decks/*.json
+
+# Scaricati dal setup
+rules/
+
+# Python
+__pycache__/
+*.pyc
+cache/
