@@ -37,6 +37,8 @@ Per ogni aggiunta approvata chiedi: "questa ce l'hai gia'?" — la lista non e' 
 ### 6. Ricerca offerte
 Per ogni carta da comprare: `python scripts/ct_search.py "<nome>"` (legge le preferenze da `preferences.json`). Mostra le migliori offerte con prezzo, condizione, lingua, venditore, tag velocita'. Se la priorita' e' la velocita' e non ci sono venditori "1-Day Ready", dillo e chiedi come procedere.
 
+**Non scegliere automaticamente l'offerta piu' economica in assoluto.** A parita' di velocita' di consegna, se l'offerta piu' economica ha una condizione sensibilmente peggiore (es. Played/Poor) e quella con condizione migliore (es. Near Mint) non costa piu' del doppio, proponi quella di qualita' migliore. Il risparmio di pochi centesimi/euro non vale una carta rovinata se l'alternativa buona costa poco di piu'.
+
 ### 7. Carrello (solo dopo approvazione esplicita sulle offerte specifiche)
 `python scripts/ct_cart.py add <product_id>` per ognuna, poi `python scripts/ct_cart.py show` e ricorda all'utente di completare l'acquisto sul sito.
 
