@@ -47,6 +47,7 @@ Il setup ti guida a:
 |---|---|
 | `setup` | Configurazione guidata primo avvio |
 | `ottimizza` | Analisi e ottimizzazione di un mazzo con proposta tagli/aggiunte spiegati |
+| `crea` | Crea un mazzo nuovo da un'idea/colore/meccanica o trasforma un precon: intervista guidata (tema, budget, combo sì/no), lista completa da 100 spiegata |
 | `judge` | Domande di regole, ruling ufficiali, controversie da gioco |
 
 ## Fonti usate dall'agente

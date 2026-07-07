@@ -47,13 +47,17 @@ Leggi `preferences.json` (creato dal setup): lingue accettate, condizione minima
 - `GET /ct0_box_items` = carte comprate via Zero in attesa (con `estimated_arrived_at` e `arrived_at`); `GET /orders` = storico ordini.
 - Scryfall richiede header `User-Agent` E `Accept: application/json` (già gestito negli script).
 
+## Skill Crea (mazzi nuovi)
+
+Se l'utente vuole un mazzo nuovo — da un'idea, un colore, una meccanica, o partendo da un precon — usa la skill `crea` (`.claude/skills/crea/SKILL.md`). In sintesi: intervista (tema, colori, budget, power level, tolleranza combo, carte possedute), scelta comandante con 2-3 proposte motivate, costruzione su scheletro standard (terre/rampa/pescata/rimozione/tema/win condition) usando `scripts/scryfall_search.py` (ricerca per meccanica ordinata per popolarità EDHREC, con prezzi indicativi e filtro `--max-eur` per il budget), poi il solito flusso acquisti.
+
 ## Skill Judge
 
 Per domande di regole e controversie usa la skill `judge` (`.claude/skills/judge/SKILL.md`). In sintesi: testo esatto + ruling ufficiali via Scryfall, regola pertinente dalle Comprehensive Rules locali (`scripts/rules_search.py`), risposta con verdetto chiaro e fonti citate.
 
 ## Struttura del progetto
 
-- `scripts/` — strumenti Python (solo stdlib): `resolve_cards.py`, `edhrec.py`, `ct_search.py`, `ct_cart.py`, `ct_box.py`, `rules_search.py`, `judge_setup.py`
+- `scripts/` — strumenti Python (solo stdlib): `resolve_cards.py`, `moxfield_import.py`, `edhrec.py`, `scryfall_search.py`, `ct_search.py`, `ct_cart.py`, `ct_box.py`, `rules_search.py`, `judge_setup.py`, `card_rulings.py`
 - `decks/` — mazzi dell'utente in JSON (personali, non committati)
 - `rules/` — Comprehensive Rules scaricate dal setup (non committate)
 - `.env` — `CARDTRADER_TOKEN` (personale, MAI committare)
