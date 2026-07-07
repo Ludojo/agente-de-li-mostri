@@ -13,7 +13,7 @@ import re
 import sys
 import urllib.error
 
-from ct_api import scryfall_get
+from ct_api import scryfall_get, scryfall_post
 
 QTY_RE = re.compile(r"^\s*(\d+)\s*[xX]?\s+(.\S*.*)$")
 
@@ -127,15 +127,51 @@ def resolve(name):
     return None, "non trovata", []
 
 
+def batch_exact(entries):
+    """Prova a risolvere tutte le righe in blocco con /cards/collection (75 per richiesta,
+    match esatto EN case-insensitive). Riduce di ~50x le richieste per liste in inglese.
+    Ritorna (risolte: dict input->card, rimanenti: list entries)."""
+    todo = [(qty, name) for qty, name in entries
+            if name.strip().lower() not in BASIC_LANDS_IT]
+    hits = {}
+    names = list(dict.fromkeys(name for _, name in todo))
+    for i in range(0, len(names), 75):
+        chunk = names[i:i + 75]
+        try:
+            res = scryfall_post("/cards/collection", {"identifiers": [{"name": n} for n in chunk]})
+        except urllib.error.HTTPError:
+            return {}, entries  # fallback totale al percorso riga-per-riga
+        found_names = {}
+        for c in res.get("data", []):
+            found_names[c["name"].lower()] = c
+        for n in chunk:
+            c = found_names.get(n.lower())
+            if c:
+                hits[n] = slim(c)
+    remaining = [(qty, name) for qty, name in entries if name not in hits]
+    return hits, remaining
+
+
 def main():
     src = sys.stdin if (len(sys.argv) < 2 or sys.argv[1] == "-") else open(sys.argv[1], encoding="utf-8")
-    resolved, problems = [], []
-    rate_limited_at = None
+    entries = []
     for line in src:
         parsed = parse_line(line)
-        if not parsed:
-            continue
-        qty, name = parsed
+        if parsed:
+            entries.append(parsed)
+
+    resolved, problems = [], []
+    rate_limited_at = None
+
+    batch_hits, remaining = batch_exact(entries)
+    for qty, name in entries:
+        if name in batch_hits:
+            card = dict(batch_hits[name])
+            card["quantity"] = qty
+            card["input"] = name
+            resolved.append(card)
+
+    for qty, name in remaining:
         try:
             card, how, candidates = resolve(name)
         except urllib.error.HTTPError as e:

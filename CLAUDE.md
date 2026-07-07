@@ -21,9 +21,9 @@ Se non esiste il file `.env` con `CARDTRADER_TOKEN`, o non esiste `preferences.j
 
 ## Flusso di ottimizzazione mazzo (skill `ottimizza`)
 
-1. Ricevi la lista (testo libero, anche italiano con refusi) → risolvi ogni riga con `scripts/resolve_cards.py`
+1. Ricevi la lista (testo libero, anche italiano con refusi) → risolvi ogni riga con `scripts/resolve_cards.py`. Se l'utente dà un link Moxfield → `scripts/moxfield_import.py <url>`
 2. Verifica: 100 carte esatte, color identity, segnala ambiguità all'utente invece di tirare a indovinare
-3. Analizza con EDHREC (`scripts/edhrec.py <comandante>`): carte core mancanti, carte a sinergia negativa
+3. Analizza con EDHREC (`scripts/edhrec.py <comandante>`): carte core mancanti, carte a sinergia negativa. **Attenzione ai precon**: se il mazzo è un precon popolare, le percentuali EDHREC sono in parte auto-confermanti (molti giocatori caricano il precon quasi invariato) — verifica le sinergie leggendo il testo Oracle delle carte, non solo le percentuali
 4. Proponi tagli e aggiunte **con spiegazione per ogni carta** e chiedi conferma
 5. Chiedi quali aggiunte l'utente possiede già; le altre → cerca offerte con `scripts/ct_search.py`
 6. Mostra le offerte trovate (prezzo, condizione, lingua, venditore, velocità) e chiedi approvazione
@@ -34,6 +34,10 @@ Se non esiste il file `.env` con `CARDTRADER_TOKEN`, o non esiste `preferences.j
 ## Preferenze utente
 
 Leggi `preferences.json` (creato dal setup): lingue accettate, condizione minima, priorità velocità vs prezzo, budget. Rispettale in ogni ricerca. Se l'utente dà priorità alla velocità, preferisci venditori CardTrader Zero e quelli con suffisso "1-Day Ready" nel nome, anche a costo leggermente superiore.
+
+**Regole di scelta offerte (valgono sempre):**
+- **Qualità vs prezzo**: a parità di velocità di consegna, se l'offerta più economica ha condizione molto peggiore (Played/Poor) e quella in condizione migliore non costa più del doppio, proponi quella migliore. Non inseguire il prezzo minimo assoluto per pochi centesimi.
+- **Tempi di consegna**: il sito CardTrader mostra a volte stime "+N settimane" per certi venditori CT Zero, ma **l'API non espone questo dato**. L'unico segnale disponibile è il tag "X-Day Ready" nel nome del venditore. Se un'offerta scelta non ha quel tag, avvisa esplicitamente l'utente che i tempi reali non sono verificabili e potrebbero essere lunghi.
 
 ## Nozioni CardTrader essenziali
 

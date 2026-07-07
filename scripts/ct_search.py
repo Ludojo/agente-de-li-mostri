@@ -27,23 +27,52 @@ CONDITION_ORDER = ["Mint", "Near Mint", "Slightly Played", "Moderately Played", 
 _expansions_cache = None
 
 
-def load_preferences():
+def project_root():
     env = find_env(os.path.dirname(os.path.abspath(__file__)))
-    root = os.path.dirname(env) if env else os.getcwd()
-    p = os.path.join(root, "preferences.json")
+    return os.path.dirname(env) if env else os.getcwd()
+
+
+def load_preferences():
+    p = os.path.join(project_root(), "preferences.json")
     if os.path.isfile(p):
         return json.load(open(p, encoding="utf-8"))
     return {}
 
 
+def _cache_path(name):
+    d = os.path.join(project_root(), "cache")
+    os.makedirs(d, exist_ok=True)
+    return os.path.join(d, name)
+
+
+def _cached(name, max_age_hours, fetch_fn):
+    """Cache JSON su file: espansioni e blueprint cambiano raramente,
+    inutile riscaricarli a ogni ricerca (sono le richieste piu' lente)."""
+    p = _cache_path(name)
+    if os.path.isfile(p) and (time.time() - os.path.getmtime(p)) < max_age_hours * 3600:
+        try:
+            return json.load(open(p, encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            pass
+    data = fetch_fn()
+    json.dump(data, open(p, "w", encoding="utf-8"))
+    return data
+
+
 def ct_expansions_by_code():
     global _expansions_cache
     if _expansions_cache is None:
+        raw = _cached("expansions.json", 24, lambda: ct_get("/expansions"))
         _expansions_cache = {}
-        for e in ct_get("/expansions"):
+        for e in raw:
             if e["game_id"] == 1:  # Magic
                 _expansions_cache.setdefault(e["code"].lower(), []).append(e)
     return _expansions_cache
+
+
+def ct_blueprints(expansion_id):
+    return _cached(f"blueprints_{expansion_id}.json", 24 * 7,
+                   lambda: ct_get("/blueprints/export", expansion_id=expansion_id))
 
 
 def scryfall_prints(card_name):
@@ -68,7 +97,7 @@ def search_offers(card_name, langs, zero_only=True, min_condition=None):
     for code in set_codes:
         for exp in exp_map.get(code, []):
             try:
-                bps = ct_get("/blueprints/export", expansion_id=exp["id"])
+                bps = ct_blueprints(exp["id"])
             except urllib.error.HTTPError:
                 continue
             matches = [b for b in bps if b.get("scryfall_id") in scryfall_ids] or \
